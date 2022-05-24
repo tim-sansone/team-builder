@@ -1,25 +1,43 @@
-import logo from './logo.svg';
 import './App.css';
+import React, { useState } from "react";
+import TeamMember from "./Components/TeamMember"
+import Form from "./Components/Form"
+
+
+
+const initialValues = {
+  name: "",
+  class: "",
+  alignment: "",
+  weapon: ""
+}
+
+
 
 function App() {
+  const [partyMembers, setPartyMembers] = useState([]);
+  const [formData, setFormData] = useState(initialValues);
+
+  const updateData = (name, value) => {
+    setFormData({...formData, [name]: value});
+  }
+
+  const newMember = () => {
+    setPartyMembers([...partyMembers, formData]);
+    setFormData(initialValues);
+  }
+  
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <>
+    <Form formData={formData} updateData={updateData} newMember={newMember}/>
+    <div className="container">
+    {
+      partyMembers.map(each => <TeamMember member={each} key={each.name}/>)
+    }
     </div>
-  );
+    </>
+  )
 }
 
 export default App;
