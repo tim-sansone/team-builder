@@ -53,6 +53,7 @@
   margin: 2%;
   padding: 2%;
   flex-grow: 1;
+  max-width: 30%;
 }
 
 

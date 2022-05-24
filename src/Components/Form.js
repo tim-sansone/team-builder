@@ -1,23 +1,43 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 
 export default function Form(props){
-    const { formData, updateData, newMember } = props;
+    const { initialValues, formData, setFormData, partyMembers, setPartyMembers, memberToEdit, setMemberToEdit } = props;
    
     const onChange = evt => {
         const { name, value } = evt.target
-        updateData(name, value);
+        setFormData({...formData, [name]: value});
     }
 
     const onSubmit = evt => {
         evt.preventDefault();
-        newMember();
+        if(Number.isFinite(memberToEdit)){
+           const newParty = partyMembers.map((each, index) => {
+                if(index === memberToEdit){
+                    return formData;
+                } else {
+                    return each;
+                }
+            })
+            setPartyMembers(newParty);
+            setFormData(initialValues);
+            setMemberToEdit();
+            return;
+            
+        }
+        setPartyMembers([...partyMembers, formData]);
+        setFormData(initialValues);
+        return;
     }
+
+    useEffect(() => {
+        Number.isFinite(memberToEdit) && setFormData(partyMembers[memberToEdit])
+    }, [memberToEdit])
 
     return (
        
         <form className="form-card" onSubmit={onSubmit}>
-            <h2>New Party Member</h2>
+            { Number.isFinite(memberToEdit) ? <h2>Editing {partyMembers[memberToEdit].name}</h2> : <h2>New Party Member</h2> }
             <label>Name 
                 <input
                 type="text"
@@ -59,7 +79,7 @@ export default function Form(props){
                 onChange={onChange}
                     />
             </label>
-            <button>Create!</button>
+            <button>{Number.isFinite(memberToEdit) ? "Edit" : "Create!"}</button>
         </form>
        
    ) 

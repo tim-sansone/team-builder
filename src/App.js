@@ -17,23 +17,29 @@ const initialValues = {
 function App() {
   const [partyMembers, setPartyMembers] = useState([]);
   const [formData, setFormData] = useState(initialValues);
-
-  const updateData = (name, value) => {
-    setFormData({...formData, [name]: value});
-  }
-
-  const newMember = () => {
-    setPartyMembers([...partyMembers, formData]);
-    setFormData(initialValues);
-  }
-  
+  const [memberToEdit, setMemberToEdit] = useState();
   
   return (
     <>
-    <Form formData={formData} updateData={updateData} newMember={newMember}/>
+    <Form
+      initialValues={initialValues}
+      formData={formData}
+      setFormData={setFormData}
+      partyMembers={partyMembers}
+      setPartyMembers={setPartyMembers}
+      memberToEdit={memberToEdit}
+      setMemberToEdit={setMemberToEdit}
+    />
     <div className="container">
     {
-      partyMembers.map(each => <TeamMember member={each} key={each.name}/>)
+      partyMembers.map((each, index) => 
+        <TeamMember
+          member={each}
+          id={index}
+          key={index}
+          setMemberToEdit={setMemberToEdit}
+        />
+      )
     }
     </div>
     </>

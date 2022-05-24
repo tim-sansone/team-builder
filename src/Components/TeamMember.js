@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function TeamMember({ member }){
+export default function TeamMember({ member, id, setMemberToEdit }){
     
     
     return (
@@ -9,6 +9,7 @@ export default function TeamMember({ member }){
             <p><strong>Class:</strong> {member.class}</p>
             <p><strong>Alignment:</strong> {member.alignment}</p>
             <p><strong>Weapon of Choice:</strong> {member.weapon}</p>
+            <button onClick={() => setMemberToEdit(id)}>Edit</button>
         </div>
     )
 }
