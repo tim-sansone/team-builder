@@ -1,11 +1,41 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import * as yup from "yup";
+
+const initialValues = {
+    name: "",
+    class: "",
+    alignment: "",
+    weapon: "",
+    email: ""
+  }
+
+  const schema = yup.object().shape({
+      name: yup.string().required("You must name your character"),
+      class: yup.string().oneOf(["Fighter", "Mage", "Ranger", "Healer", "Theif", "Jester"], "Please select a class"),
+      alignment: yup.string().oneOf(["Lawful Good","Lawful Neutral","Lawful Evil","Neutral Good","Neutral Neutral","Neutral Evil","Chaotic Good","Chaotic Neutral","Chaotic Evil" ], "Please select an alignment"),
+      weapon: yup.string(),
+      email: yup.string().required("You must enter an email").email("Must be a valid email")
+  })
 
 
 export default function Form(props){
-    const { initialValues, formData, setFormData, partyMembers, setPartyMembers, memberToEdit, setMemberToEdit } = props;
+    const [formData, setFormData] = useState(initialValues);
+    const [errors, setErrors] = useState(initialValues);
+    const [disabled, setDisabled] = useState(false);
+    
+    
+    const { memberToEdit, setMemberToEdit, partyMembers, setPartyMembers} = props;
    
+    const setFormErrors = (name, value) => {
+        yup.reach(schema, name).validate(value)
+            .then(() => setErrors({...errors, [name]: ""}))
+            .catch(err => setErrors({...errors, [name]: err.errors[0]}))
+    }
+    
+    
     const onChange = evt => {
         const { name, value } = evt.target
+        setFormErrors(name, value);
         setFormData({...formData, [name]: value});
     }
 
@@ -34,9 +64,15 @@ export default function Form(props){
         Number.isFinite(memberToEdit) && setFormData(partyMembers[memberToEdit])
     }, [memberToEdit])
 
+    useEffect(() => {
+        schema.isValid(formData).then(res => setDisabled(!res))
+    }, [formData])
+
     return (
-       
         <form className="form-card" onSubmit={onSubmit}>
+            <div style={{ color: "red" }}>
+                <div>{errors.name}</div><div>{errors.class}</div><div>{errors.alignment}</div><div>{errors.weapon}</div><div>{errors.email}</div>
+            </div>
             { Number.isFinite(memberToEdit) ? <h2>Editing {partyMembers[memberToEdit].name}</h2> : <h2>New Party Member</h2> }
             <label>Name 
                 <input
@@ -79,8 +115,15 @@ export default function Form(props){
                 onChange={onChange}
                     />
             </label>
-            <button>{Number.isFinite(memberToEdit) ? "Edit" : "Create!"}</button>
+            <label>Email
+                <input 
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={onChange}
+                />
+            </label>
+            <button disabled={disabled}>{Number.isFinite(memberToEdit) ? "Edit" : "Create!"}</button>
         </form>
-       
    ) 
 }

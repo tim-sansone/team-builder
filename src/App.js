@@ -5,26 +5,28 @@ import Form from "./Components/Form"
 
 
 
-const initialValues = {
-  name: "",
-  class: "",
-  alignment: "",
-  weapon: ""
-}
+// const initialValues = {
+//   name: "",
+//   class: "",
+//   alignment: "",
+//   weapon: "",
+//   email: ""
+// }
 
 
 
 function App() {
   const [partyMembers, setPartyMembers] = useState([]);
-  const [formData, setFormData] = useState(initialValues);
+  // const [formData, setFormData] = useState(initialValues);
   const [memberToEdit, setMemberToEdit] = useState();
+  
   
   return (
     <>
     <Form
-      initialValues={initialValues}
-      formData={formData}
-      setFormData={setFormData}
+      // initialValues={initialValues}
+      // formData={formData}
+      // setFormData={setFormData}
       partyMembers={partyMembers}
       setPartyMembers={setPartyMembers}
       memberToEdit={memberToEdit}

@@ -9,6 +9,7 @@ export default function TeamMember({ member, id, setMemberToEdit }){
             <p><strong>Class:</strong> {member.class}</p>
             <p><strong>Alignment:</strong> {member.alignment}</p>
             <p><strong>Weapon of Choice:</strong> {member.weapon}</p>
+            <p><strong>Email:</strong> {member.email}</p>
             <button onClick={() => setMemberToEdit(id)}>Edit</button>
         </div>
     )
